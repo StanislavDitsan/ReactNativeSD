@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, TextInput, FlatList, Alert, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, FlatList, Alert, ImageBackground, Modal } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
   const [enteredGoalText, setEnteredGoalText] = useState('');
   const [courseGoals, setCourseGoals] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     loadGoals();
@@ -24,6 +25,7 @@ export default function App() {
     setCourseGoals(currentCourseGoals => [...currentCourseGoals, newGoal]);
     saveGoals([...courseGoals, newGoal]);
     setEnteredGoalText('');
+    setIsModalVisible(false); // Close the modal after adding goal
   };
 
   const deleteGoalHandler = goalId => {
@@ -64,7 +66,7 @@ export default function App() {
               onChangeText={goalInputHandler}
               value={enteredGoalText}
             />
-            <Button title='Add Goal' onPress={addGoalHandler} />
+            <Button title='Add Goal' onPress={() => setIsModalVisible(true)} />
           </View>
           <View style={styles.goalsContainer}>
             <Text style={styles.goalsTitle}>List of Goals</Text>
@@ -82,6 +84,29 @@ export default function App() {
           </View>
         </View>
       </ImageBackground>
+      {/* Modal for adding a goal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={() => setIsModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Your Goal</Text>
+            <TextInput
+              style={styles.modalTextInput}
+              placeholder='Enter your goal'
+              onChangeText={goalInputHandler}
+              value={enteredGoalText}
+            />
+            <View style={styles.modalButtonContainer}>
+              <Button title='Cancel' onPress={() => setIsModalVisible(false)} />
+              <Button title='Confirm' onPress={addGoalHandler} />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -129,5 +154,35 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     borderRadius: 5,
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  modalTextInput: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+    width: 300,
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '50%',
   },
 });

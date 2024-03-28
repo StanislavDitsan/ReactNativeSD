@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, TextInput, FlatList, Alert, ImageBackground, Modal } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, FlatList, Alert, ImageBackground, Modal, StatusBar } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
@@ -57,6 +57,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="light-content" />
       <ImageBackground source={require('./assets/bggoal.png')} style={styles.backgroundImage}>
         <View style={styles.contentContainer}>
           <View style={styles.inputContainer}>

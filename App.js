@@ -76,11 +76,32 @@ export default function App() {
               renderItem={itemData => (
                 <View style={styles.goalItem}>
                   <Text>{itemData.item.value}</Text>
-                  <Button title='Delete' onPress={() => deleteGoalHandler(itemData.item.id)} />
+                  <Button
+                    title='Delete'
+                    onPress={() => {
+                      Alert.alert(
+                        'Confirm Deletion',
+                        'Are you sure you want to delete this goal?',
+                        [
+                          {
+                            text: 'Cancel',
+                            style: 'cancel',
+                          },
+                          {
+                            text: 'Delete',
+                            onPress: () => deleteGoalHandler(itemData.item.id),
+                            style: 'destructive',
+                          },
+                        ],
+                        { cancelable: true }
+                      );
+                    }}
+                  />
                 </View>
               )}
-              bounces={false} // Disable bounce effect vertically
+              bounces={false}
             />
+
           </View>
         </View>
       </ImageBackground>
@@ -101,8 +122,8 @@ export default function App() {
               value={enteredGoalText}
             />
             <View style={styles.modalButtonContainer}>
-              <Button title='Cancel' onPress={() => setIsModalVisible(false)} />
-              <Button title='Confirm' onPress={addGoalHandler} />
+              <Button title='Cancel' onPress={() => setIsModalVisible(false)} color="#f31282" />
+              <Button title='Confirm' onPress={addGoalHandler} color="#008000" />
             </View>
           </View>
         </View>
